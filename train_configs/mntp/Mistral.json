@@ -7,6 +7,7 @@
     "gradient_accumulation_steps": 1,
     "do_train": true,
     "do_eval": true,
+    "enable_peft": true,
     "max_seq_length": 512,
     "mask_token_type": "blank",
     "data_collator_type": "all_mask",

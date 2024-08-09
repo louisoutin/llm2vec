@@ -180,6 +180,12 @@ class ModelArguments:
             "help": "Whether to use one of the fast tokenizer (backed by the tokenizers library) or not."
         },
     )
+    enable_peft: bool = field(
+        default=True,
+        metadata={
+            "help": "Whether to use lora for training."
+        },
+    )
     model_revision: str = field(
         default="main",
         metadata={
@@ -570,6 +576,7 @@ def main():
             token=model_args.token,
             streaming=data_args.streaming,
         )
+
         if "validation" not in raw_datasets.keys():
             raw_datasets["validation"] = load_dataset(
                 data_args.dataset_name,
@@ -621,6 +628,8 @@ def main():
                 token=model_args.token,
             )
 
+    raw_datasets['train'] = raw_datasets['train'].select(range(10000))
+    print('done')
     # See more about loading any type of standard or custom dataset (from files, python dict, pandas DataFrame, etc) at
     # https://huggingface.co/docs/datasets/loading_datasets.
 
@@ -707,12 +716,12 @@ def main():
         attn_implementation=model_args.attn_implementation,
     )
 
-    # model organization is MODEL_TYPEBiForMNTP.model -> MODEL_TYPELBiModel, we have to apply PEFT to the inner model
-    model.model = initialize_peft(
-        model.model,
-        lora_r=custom_args.lora_r,
-        lora_alpha=2 * custom_args.lora_r,
-        lora_dropout=custom_args.lora_dropout,
+    if model_args.enable_peft:# model organization is MODEL_TYPEBiForMNTP.model -> MODEL_TYPELBiModel, we have to apply PEFT to the inner model
+        model.model = initialize_peft(
+            model.model,
+            lora_r=custom_args.lora_r,
+            lora_alpha=2 * custom_args.lora_r,
+            lora_dropout=custom_args.lora_dropout,
     )
 
     # We resize the embeddings only when necessary to avoid index errors. If you are creating a model from scratch
