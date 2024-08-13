@@ -9,3 +9,5 @@ results/**
 output/
 *.log
 cluster_scripts/**
+.ipynb_checkpoints/
+.venv/

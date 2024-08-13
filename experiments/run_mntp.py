@@ -628,8 +628,6 @@ def main():
                 token=model_args.token,
             )
 
-    raw_datasets['train'] = raw_datasets['train'].select(range(10000))
-    print('done')
     # See more about loading any type of standard or custom dataset (from files, python dict, pandas DataFrame, etc) at
     # https://huggingface.co/docs/datasets/loading_datasets.
 
