@@ -364,6 +364,12 @@ class ModelArguments:
     bidirectional: bool = field(
         default=True, metadata={"help": "Whether to use bidirectional attention."}
     )
+    enable_peft: bool = field(
+        default=True,
+        metadata={
+            "help": "Whether to use lora for training."
+        },
+    )
 
     def __post_init__(self):
         if self.config_overrides is not None and (
@@ -736,14 +742,24 @@ def main():
             if model_args.torch_dtype in ["auto", None]
             else getattr(torch, model_args.torch_dtype)
         )
-        l2v = LLM2Vec.from_pretrained(
-            base_model_name_or_path=model_args.model_name_or_path,
-            enable_bidirectional=model_args.bidirectional,
-            peft_model_name_or_path=model_args.peft_addr,
-            merge_peft=False,
-            torch_dtype=torch_dtype,
-            attn_implementation=model_args.attn_implementation,
-        )
+        if model_args.enable_peft:
+            l2v = LLM2Vec.from_pretrained(
+                base_model_name_or_path=model_args.model_name_or_path,
+                enable_bidirectional=model_args.bidirectional,
+                peft_model_name_or_path=model_args.peft_addr,
+                merge_peft=False,
+                torch_dtype=torch_dtype,
+                attn_implementation=model_args.attn_implementation,
+            )
+        else:
+            l2v = LLM2Vec.from_pretrained(
+                base_model_name_or_path=model_args.model_name_or_path,
+                enable_bidirectional=model_args.bidirectional,
+                merge_peft=False,
+                torch_dtype=torch_dtype,
+                attn_implementation=model_args.attn_implementation,
+            )
+
 
         model = ModelForWordTask(
             model=l2v.model,
