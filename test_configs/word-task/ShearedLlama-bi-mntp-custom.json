@@ -1,14 +1,15 @@
 {
     "model_name_or_path": "/home/BiomikeeNew/werent4/llm2vec/output/mntp/Sheared-LLaMA-1.3B/checkpoint-90000",
-    "enable_peft": false,
+    "cls_addr":"/home/BiomikeeNew/werent4/llm2vec/output/word-task/pos_tags/ShearedLlama/bi-mntp/results/checkpoint-90000/checkpoint-5000/",
     "model_class": "custom",
+    "enable_peft": false,
     "bidirectional": true,
     "classifier_dropout": 0.1,
     "torch_dtype": "bfloat16",
     "attn_implementation": "flash_attention_2",
     "merge_subwords": true,
     "retroactive_labels": "next_token",
-    "output_dir": "output/word-task/pos_tags/ShearedLlama/bi-mntp/results/checkpoint-90000",
+    "output_dir": "output/test-word-task/pos_tags/ShearedLlama/bi-mntp/results/checkpoint-90000",
     "dataset_name": "conll2003",
     "task": "pos_tags",
     "max_seq_length": 512

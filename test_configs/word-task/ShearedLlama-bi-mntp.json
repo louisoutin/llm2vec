@@ -1,5 +1,6 @@
 {
     "model_name_or_path": "princeton-nlp/Sheared-LLaMA-1.3B",
+    "cls_addr":"/home/BiomikeeNew/werent4/llm2vec/output/word-task/pos_tags/ShearedLlama/bi-mntp/results/original/checkpoint-5000",
     "peft_addr": "McGill-NLP/LLM2Vec-Sheared-LLaMA-mntp",
     "model_class": "custom",
     "bidirectional": true,
@@ -8,7 +9,7 @@
     "attn_implementation": "flash_attention_2",
     "merge_subwords": true,
     "retroactive_labels": "next_token",
-    "output_dir": "output/word-task/pos_tags/ShearedLlama/bi-mntp/results/original",
+    "output_dir": "output/test-word-task/pos_tags/ShearedLlama/bi-mntp/results/original",
     "dataset_name": "conll2003",
     "task": "pos_tags",
     "max_seq_length": 512

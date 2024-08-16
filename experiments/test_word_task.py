@@ -132,6 +132,11 @@ if __name__ == "__main__":
         help="The dir address where adapter_model.bin is saved.",
     )
     parser.add_argument(
+        "--enable_peft",
+        default=True,
+        help="Whether to use lora for training."
+    )
+    parser.add_argument(
         "--cls_addr",
         default=None,
         type=str,
@@ -184,8 +189,8 @@ if __name__ == "__main__":
         # args = parser.parse_json_file(json_file=os.path.abspath(sys.argv[1]))
     else:
         args = parser.parse_args()
-
-    path_to_check = args.peft_addr if args.peft_addr else args.model_name_or_path
+    if args.enable_peft:
+        path_to_check = args.peft_addr if args.peft_addr else args.model_name_or_path
     assert (
         args.output_dir is not None
     ), "If you want to evaluate a model, you have to provide the output_dir"
@@ -237,14 +242,22 @@ if __name__ == "__main__":
             if args.torch_dtype in ["auto", None]
             else getattr(torch, args.torch_dtype)
         )
-        l2v = LLM2Vec.from_pretrained(
-            base_model_name_or_path=args.model_name_or_path,
-            enable_bidirectional=args.bidirectional,
-            peft_model_name_or_path=args.peft_addr,
-            merge_peft=False,
-            torch_dtype=torch_dtype,
-            attn_implementation=args.attn_implementation,
-        )
+        if args.enable_peft:
+            l2v = LLM2Vec.from_pretrained(
+                base_model_name_or_path=args.model_name_or_path,
+                enable_bidirectional=args.bidirectional,
+                peft_model_name_or_path=args.peft_addr,
+                merge_peft=False,
+                torch_dtype=torch_dtype,
+                attn_implementation=args.attn_implementation,
+            )
+        else:
+            l2v = LLM2Vec.from_pretrained(
+                base_model_name_or_path=args.model_name_or_path,
+                enable_bidirectional=args.bidirectional,
+                torch_dtype=torch_dtype,
+                attn_implementation=args.attn_implementation,
+            )
         model = ModelForWordTask(
             model=l2v.model,
             merge_subwords=args.merge_subwords,
